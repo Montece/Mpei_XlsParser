@@ -10,3 +10,5 @@
 - [SQLite](http://www.java2s.com/Code/Jar/s/Downloadsqlitejdbc372jar.htm)
 - [SQLite Administrator](http://sqliteadmin.orbmu2k.de/)
 - [Apache POI](https://poi.apache.org/download.html)
+
+Excel документ и SQL база данных находятся в папке XlsParser
