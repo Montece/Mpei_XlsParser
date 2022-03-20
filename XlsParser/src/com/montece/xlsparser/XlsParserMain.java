@@ -24,9 +24,18 @@ public class XlsParserMain
 		
 		dbManager = new DBManager("Main.s3db");
 		xlsManager = new XLSManager("Задание.xlsx");
-	
-		dbManager.deleteTable("MainTable");
+		
+		try
+		{
+			dbManager.deleteTable("MainTable");
+		}
+		catch (Exception x)
+		{
+			System.out.println("Таблицы не существует! Создание новой...");
+		}
+		
 		dbManager.addTable("MainTable");
+		
 		
 		List<DBElement> elements = xlsManager.createElementsArray(0);
 		
@@ -36,6 +45,8 @@ public class XlsParserMain
 		}        
 		
 		dbManager.printTable("MainTable");
+		
+		dbManager.Stop();
 		
 		System.out.println("Program stopped.");
 	}

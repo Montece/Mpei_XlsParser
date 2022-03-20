@@ -20,7 +20,7 @@ public class DBManager
     	Class.forName(CLASS_NAME);
     	this.connection = DriverManager.getConnection(CONNECTION_STRING + DATABASE_PATH);
     }
-
+    
     public void addElement(String tableName, DBElement element) throws Exception
     {
     	PreparedStatement statement;
@@ -37,6 +37,7 @@ public class DBManager
         statement.setObject(9, element.forecast_qoil_data1);
         statement.setObject(10, element.forecast_qoil_data2);
         statement.execute();
+        statement.close();
     }
     
     public void printTable(String tableName) throws Exception
@@ -59,6 +60,9 @@ public class DBManager
     		element.forecast_qoil_data2 = result.getInt("forecast_qoil_data2");
     		System.out.println(element);
     	}
+    	
+    	result.close();
+    	statement.close();
     }
     
     public void addTable(String tableName) throws Exception
@@ -75,11 +79,21 @@ public class DBManager
     			"[forecast_qoil_data1] INTEGER DEFAULT '0' NOT NULL," + 
     			"[forecast_qoil_data2] INTEGER DEFAULT '0' NOT NULL)", tableName));
     	statement.execute();
+    	statement.close();
     }
     
     public void deleteTable(String tableName) throws Exception
     {
     	PreparedStatement statement = this.connection.prepareStatement(String.format("DROP TABLE [%s]", tableName));
     	statement.execute();
+    	statement.close();
+    }
+
+    public void Stop() throws Exception
+    {
+    	if (!connection.isClosed())
+    	{
+    		connection.close();
+    	}
     }
 }
