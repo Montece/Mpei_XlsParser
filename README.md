@@ -2,7 +2,6 @@
 Special task from MPEI
 
 <img src="preview.png" data-canonical-src="preview.png" width="259" height="106" />
-![Preview](preview.png "Preview" =259x106)
 Парсинг excel документа и перенос его в SQL бд на языке Java.
 ## Информация
 ### Unity Game
