@@ -11,4 +11,4 @@
 - [SQLite Administrator](http://sqliteadmin.orbmu2k.de/)
 - [Apache POI](https://poi.apache.org/download.html)
 
-Excel документ и SQL база данных находятся в папке XlsParser
+Excel документ и SQL база данных находятся в папке XlsParser.
