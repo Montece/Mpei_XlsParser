@@ -1,7 +1,7 @@
 # Mpei_XlsParser
 Special task from MPEI
 
-![Text](preview.png "Previw")
+![Preview](preview.png "Preview" =259x106)
 Парсинг excel документа и перенос его в SQL бд на языке Java.
 ## Информация
 ### Unity Game
