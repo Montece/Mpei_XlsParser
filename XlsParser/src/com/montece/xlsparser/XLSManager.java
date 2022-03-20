@@ -18,6 +18,7 @@ public class XLSManager
 	private FileInputStream stream;
 	private Workbook workbook;
 	
+	/* Конструктор для инициализации класса. Начинает сразу читать файл */
 	public XLSManager(String filePath) throws Exception
 	{
 		FILE_PATH = new File(filePath);
@@ -25,6 +26,7 @@ public class XLSManager
 		workbook = new XSSFWorkbook(stream);
 	}
 	
+	/* Вывод страницы XLS в консоль */
 	public void printSheet(int id) throws Exception
     {
 		Sheet sheet = workbook.getSheetAt(id);
@@ -43,7 +45,7 @@ public class XLSManager
 						System.out.print(cell.getNumericCellValue() + "\t");
 						break;
 					case BLANK:
-						System.out.print("<пусто>" + "\t");
+						System.out.print("<пусто>\t");
 						break;
 					default:
 						break;
@@ -54,6 +56,7 @@ public class XLSManager
 		}
     }
 
+	/* Создание массива элементов из файла excel */
 	public List<DBElement> createElementsArray(int id)
 	{
 		List<DBElement> elements = new ArrayList<DBElement>();
@@ -111,5 +114,12 @@ public class XLSManager
 		}
 		
 		return elements;
+	}
+
+	/* Закрытие файла */
+	public void Stop() throws Exception
+	{
+		workbook.close();
+		stream.close();
 	}
 }

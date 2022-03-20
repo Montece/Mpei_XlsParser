@@ -6,6 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+
 public class DBManager
 {
 	private final String CLASS_NAME = "org.sqlite.JDBC";
@@ -14,6 +19,7 @@ public class DBManager
     
     private Connection connection;
 
+    /* Конструктор для инициализации класса. Устанавливает соединение с БД и подключает драйвер */
     public DBManager(String databasePath) throws Exception
     {
     	DATABASE_PATH = databasePath;
@@ -21,6 +27,7 @@ public class DBManager
     	this.connection = DriverManager.getConnection(CONNECTION_STRING + DATABASE_PATH);
     }
     
+    /* Добавляем новый элемент в таблицу */
     public void addElement(String tableName, DBElement element) throws Exception
     {
     	PreparedStatement statement;
@@ -40,6 +47,7 @@ public class DBManager
         statement.close();
     }
     
+    /* Выводим в консоль таблицу */
     public void printTable(String tableName) throws Exception
     {
     	PreparedStatement statement = this.connection.prepareStatement(String.format("SELECT * FROM [%s]", tableName));
@@ -65,6 +73,37 @@ public class DBManager
     	statement.close();
     }
     
+    /* Преобразовываем таблицу в строку */
+	public String tableToString(String tableName) throws Exception
+    {
+		String str = "";
+		
+		PreparedStatement statement = this.connection.prepareStatement(String.format("SELECT * FROM [%s]", tableName));
+    	ResultSet result = statement.executeQuery();
+    	
+    	while (result.next())
+    	{
+    		DBElement element = new DBElement();
+    		element.id = result.getInt("id");
+    		element.company = result.getString("company");
+    		element.fact_qliq_data1 = result.getInt("fact_qliq_data1");
+    		element.fact_qliq_data2 = result.getInt("fact_qliq_data2");
+    		element.fact_qoil_data1 = result.getInt("fact_qoil_data1");
+    		element.fact_qoil_data2 = result.getInt("fact_qoil_data2");
+    		element.forecast_qliq_data1 = result.getInt("forecast_qliq_data1");
+    		element.forecast_qliq_data2 = result.getInt("forecast_qliq_data2");
+    		element.forecast_qoil_data1 = result.getInt("forecast_qoil_data1");
+    		element.forecast_qoil_data2 = result.getInt("forecast_qoil_data2");
+    		str += element + "\n\r";
+    	}
+    	
+    	result.close();
+    	statement.close();
+		
+		return str;
+    }
+    
+	/* Создаем таблицу */
     public void addTable(String tableName) throws Exception
     {
     	PreparedStatement statement = this.connection.prepareStatement(String.format("CREATE TABLE [%s] (" + 
@@ -82,13 +121,15 @@ public class DBManager
     	statement.close();
     }
     
+    /* Удаляем таблицу */
     public void deleteTable(String tableName) throws Exception
     {
     	PreparedStatement statement = this.connection.prepareStatement(String.format("DROP TABLE [%s]", tableName));
     	statement.execute();
     	statement.close();
     }
-
+    
+    /* Завершаем работу с БД */
     public void Stop() throws Exception
     {
     	if (!connection.isClosed())

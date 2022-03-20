@@ -2,6 +2,8 @@ package com.montece.xlsparser;
 
 public class DBElement
 {
+	//Список всех полей
+	
     public int id;
     public String company;
     public int fact_qliq_data1;
@@ -13,11 +15,13 @@ public class DBElement
     public int forecast_qoil_data1;
     public int forecast_qoil_data2;
     
+    /* Пустой конструктор */
     public DBElement()
     {
     	
     }
     
+    /* Конструктор с параметрами для полей класса */
     public DBElement(int id_, String company_, int fact_qliq_data1_, int fact_qliq_data2_, int fact_qoil_data1_, int fact_qoil_data2_,
     		int forecast_qliq_data1_, int forecast_qliq_data2_, int forecast_qoil_data1_, int forecast_qoil_data2_)
     {
@@ -34,6 +38,7 @@ public class DBElement
     	this.forecast_qoil_data2 = forecast_qoil_data2_;
     }
     
+    /* Перегрузка метода toString для упрощения вывода объекта */
     @Override
     public String toString()
     {
