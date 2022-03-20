@@ -44,8 +44,6 @@ public class XlsParserMain
 	    {
 	    	dbManager = new DBManager("Main.s3db");
 			xlsManager = new XLSManager("Задание.xlsx");
-			String str = dbManager.tableToString("MainTable");
-			textArea.setText(textArea.getText() + str);
 			
 			try
 			{
@@ -65,7 +63,10 @@ public class XlsParserMain
 				dbManager.addElement("MainTable", element);
 			}
 			
+			//Вывод данных
 			dbManager.printTable("MainTable");
+			String str = dbManager.tableToString("MainTable");
+			textArea.setText(textArea.getText() + str);
 	    }
 	    catch (Exception x)
 	    {
