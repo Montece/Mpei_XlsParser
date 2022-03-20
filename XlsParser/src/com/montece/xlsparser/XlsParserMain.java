@@ -22,8 +22,8 @@ public class XlsParserMain
 	{
 		System.out.println("Program started.");
 		
-		dbManager = new DBManager("<ÏÓÒÜ_ÄÎ_ÁÀÇÛ_ÄÀÍÍÛÕ>");
-		xlsManager = new XLSManager("<ÏÓÒÜ_ÄÎ_ÄÎÊÓÌÅÍÒÀ>");
+		dbManager = new DBManager("Main.s3db");
+		xlsManager = new XLSManager("Çàäàíèå.xlsx");
 	
 		dbManager.deleteTable("MainTable");
 		dbManager.addTable("MainTable");
