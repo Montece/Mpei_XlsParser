@@ -1,10 +1,11 @@
 package com.montece.xlsparser;
 
 import java.io.*;
-import java.sql.PreparedStatement;
+import java.text.ParseException;
 import java.util.*;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -26,9 +27,11 @@ public class XLSManager
 		workbook = new XSSFWorkbook(stream);
 	}
 	
-	/* Вывод страницы XLS в консоль */
-	public void printSheet(int id) throws Exception
+	/* Преобразовываем xls страницу в строку */
+	public String sheetToString(int id) throws Exception
     {
+		String str = "";
+		
 		Sheet sheet = workbook.getSheetAt(id);
 		FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 		
@@ -39,30 +42,32 @@ public class XLSManager
 				switch (formulaEvaluator.evaluateInCell(cell).getCellType())
 				{
 					case STRING:
-						System.out.print(cell.getStringCellValue() + "\t");
+						str += cell.getStringCellValue() + "\t";
 						break;
 					case NUMERIC:
-						System.out.print(cell.getNumericCellValue() + "\t");
+						str += cell.getNumericCellValue() + "\t";
 						break;
 					case BLANK:
-						System.out.print("<пусто>\t");
+						str += "<пусто>\t";						
 						break;
 					default:
 						break;
 				}
 			}
 			
-			System.out.println();
+			str += "\n\r";
 		}
+		
+		return str;
     }
 
 	/* Создание массива элементов из файла excel */
-	public List<DBElement> createElementsArray(int id)
+	public List<DBElement> createElementsArray(int id) throws ParseException
 	{
 		List<DBElement> elements = new ArrayList<DBElement>();
 		
 		Sheet sheet = workbook.getSheetAt(id);
-		FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+		//FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 
 		for (int rowIndex = 3; rowIndex < sheet.getPhysicalNumberOfRows(); rowIndex++)
 		{
@@ -105,6 +110,9 @@ public class XLSManager
 					case 9:
 						element.forecast_qoil_data2 = (int)cell.getNumericCellValue();
 						break;
+					case 10:
+						element.setDate(DateUtil.getJavaDate(cell.getNumericCellValue()));
+						break;
 					default:
 						break;
 				}
@@ -117,9 +125,16 @@ public class XLSManager
 	}
 
 	/* Закрытие файла */
-	public void Stop() throws Exception
+	public void Stop()
 	{
-		workbook.close();
-		stream.close();
+		try
+		{
+			workbook.close();
+			stream.close();
+		}
+		catch (IOException x)
+		{
+			
+		}
 	}
 }

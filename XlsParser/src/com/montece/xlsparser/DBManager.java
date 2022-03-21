@@ -6,11 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-
 public class DBManager
 {
 	private final String CLASS_NAME = "org.sqlite.JDBC";
@@ -31,7 +26,7 @@ public class DBManager
     public void addElement(String tableName, DBElement element) throws Exception
     {
     	PreparedStatement statement;
-    	String command = String.format("INSERT INTO [%s]('id', 'company', 'fact_qliq_data1', 'fact_qliq_data2', 'fact_qoil_data1', 'fact_qoil_data2', 'forecast_qliq_data1', 'forecast_qliq_data2', 'forecast_qoil_data1', 'forecast_qoil_data2') VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", tableName);
+    	String command = String.format("INSERT INTO [%s]('id', 'company', 'fact_qliq_data1', 'fact_qliq_data2', 'fact_qoil_data1', 'fact_qoil_data2', 'forecast_qliq_data1', 'forecast_qliq_data2', 'forecast_qoil_data1', 'forecast_qoil_data2', 'date', 'total_qliq', 'total_qoil') VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", tableName);
         statement = this.connection.prepareStatement(command);
         statement.setObject(1, element.id);
         statement.setObject(2, element.company);
@@ -43,34 +38,11 @@ public class DBManager
         statement.setObject(8, element.forecast_qliq_data2);
         statement.setObject(9, element.forecast_qoil_data1);
         statement.setObject(10, element.forecast_qoil_data2);
+        statement.setObject(11, element.getDBDateString());
+        statement.setObject(12, element.fact_qliq_data1 + element.fact_qliq_data2 + element.forecast_qliq_data1 + element.forecast_qliq_data2);
+        statement.setObject(13, element.fact_qoil_data1 + element.fact_qoil_data2 + element.forecast_qoil_data1 + element.forecast_qoil_data2);
         statement.execute();
         statement.close();
-    }
-    
-    /* Выводим в консоль таблицу */
-    public void printTable(String tableName) throws Exception
-    {
-    	PreparedStatement statement = this.connection.prepareStatement(String.format("SELECT * FROM [%s]", tableName));
-    	ResultSet result = statement.executeQuery();
-    	
-    	while (result.next())
-    	{
-    		DBElement element = new DBElement();
-    		element.id = result.getInt("id");
-    		element.company = result.getString("company");
-    		element.fact_qliq_data1 = result.getInt("fact_qliq_data1");
-    		element.fact_qliq_data2 = result.getInt("fact_qliq_data2");
-    		element.fact_qoil_data1 = result.getInt("fact_qoil_data1");
-    		element.fact_qoil_data2 = result.getInt("fact_qoil_data2");
-    		element.forecast_qliq_data1 = result.getInt("forecast_qliq_data1");
-    		element.forecast_qliq_data2 = result.getInt("forecast_qliq_data2");
-    		element.forecast_qoil_data1 = result.getInt("forecast_qoil_data1");
-    		element.forecast_qoil_data2 = result.getInt("forecast_qoil_data2");
-    		System.out.println(element);
-    	}
-    	
-    	result.close();
-    	statement.close();
     }
     
     /* Преобразовываем таблицу в строку */
@@ -94,6 +66,9 @@ public class DBManager
     		element.forecast_qliq_data2 = result.getInt("forecast_qliq_data2");
     		element.forecast_qoil_data1 = result.getInt("forecast_qoil_data1");
     		element.forecast_qoil_data2 = result.getInt("forecast_qoil_data2");
+    		element.setDate(result.getInt("date"));
+    		element.total_qliq = result.getInt("total_qliq");
+    		element.total_qoil = result.getInt("total_qoil");
     		str += element + "\n\r";
     	}
     	
@@ -116,7 +91,10 @@ public class DBManager
     			"[forecast_qliq_data1] INTEGER DEFAULT '0' NOT NULL," + 
     			"[forecast_qliq_data2] INTEGER DEFAULT '0' NOT NULL," + 
     			"[forecast_qoil_data1] INTEGER DEFAULT '0' NOT NULL," + 
-    			"[forecast_qoil_data2] INTEGER DEFAULT '0' NOT NULL)", tableName));
+    			"[forecast_qoil_data2] INTEGER DEFAULT '0' NOT NULL," +
+    			"[date] DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL," +
+    			"[total_qliq] INTEGER DEFAULT '0' NOT NULL," +
+    			"[total_qoil] INTEGER DEFAULT '0' NOT NULL)", tableName));
     	statement.execute();
     	statement.close();
     }
@@ -130,11 +108,18 @@ public class DBManager
     }
     
     /* Завершаем работу с БД */
-    public void Stop() throws Exception
+    public void Stop()
     {
-    	if (!connection.isClosed())
+    	try
     	{
-    		connection.close();
+    		if (!connection.isClosed())
+        	{
+        		connection.close();
+        	}
+    	}
+    	catch (SQLException x)
+    	{
+    		
     	}
     }
 }

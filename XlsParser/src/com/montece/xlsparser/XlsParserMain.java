@@ -1,85 +1,127 @@
 package com.montece.xlsparser;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class XlsParserMain
 {
 	private static DBManager dbManager;
 	private static XLSManager xlsManager;
+	private static MainForm form;
+	private static final boolean USE_CONSOLE_OUTPUT = false;
+	private static final boolean USE_FORM_OUTPUT = true;
 	
-	public static void main(String[] args) throws Exception
+	/* Точка вхождения программы */
+	public static void main(String[] args)
 	{
-		System.out.println("Program started.");
+		form = new MainForm("XlsParserMain - Window", 500, 750);
 		
-		//Отрисовка окна посередине экрана с информацией из базы данных, которая туда поступила из файла excel
-		JFrame frame = new JFrame("XlsParserMain - Window");
-		frame.setSize(500, 500);
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
-	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		printText("Запуск программы");
+		
+	   	printText("Инициализация базы данных...");
+	   	try
+	   	{
+	   		dbManager = new DBManager("Main.s3db"); //args[1]
+	    }
+	    catch (Exception x)
+	   	{
+	   		printText("Ошибка инициализации базы данных!");
+	   		printError(x);
+	   		return;
+	   	}
+	   	printText("Успешная инициализации базы данных!");
 	    
-	    JTextArea textArea = new JTextArea("Данные, полученные из базы данных: \n\r");	    
-	    frame.getContentPane().add(textArea);
-	    frame.setVisible(true);
-	    
+	    printText("Инициализация документа excel...");
 	    try
+	   	{
+	   		xlsManager = new XLSManager("Задание.xlsx"); //args[2]
+	   	}
+	   	catch (Exception x)
 	    {
-	    	dbManager = new DBManager("Main.s3db");
-			xlsManager = new XLSManager("Задание.xlsx");
-			
-			try
-			{
-				dbManager.deleteTable("MainTable");
-			}
-			catch (Exception x)
-			{
-				System.out.println("Таблицы не существует! Создание новой...");
-			}
-			
+	    	printText("Ошибка инициализации документа excel!");
+	   		printError(x);
+	   		return;
+	   	}
+		
+	    printText("Удаление уже существующей таблицы...");
+		try
+		{
+			dbManager.deleteTable("MainTable");
+		}
+		catch (Exception x)
+		{
+			printText("Таблицы не существует! Создание новой...");
+		}
+		
+		printText("Добавление новой таблицы...");
+		try
+		{
 			dbManager.addTable("MainTable");
-			
-			List<DBElement> elements = xlsManager.createElementsArray(0);
-			
+		}
+		catch (Exception x)
+		{
+			printText("Ошибка добавления таблицы!");
+			printError(x);
+			return;
+		}
+		
+		List<DBElement> elements = null;
+		
+		printText("Парсинг excel документа...");
+		try
+		{
+			elements = xlsManager.createElementsArray(0);
+		}
+		catch (Exception x)
+		{
+			printText("Ошибка парсинга таблицы!");
+			printError(x);
+			return;
+		}
+		
+		printText("Добавление элементов в таблицу...");
+		try
+		{
 			for	(DBElement element : elements)
 			{
 				dbManager.addElement("MainTable", element);
 			}
-			
-			//Вывод данных
-			dbManager.printTable("MainTable");
+		}
+		catch (Exception x)
+		{
+			printText("Ошибка добавления элементов в таблицу!");
+			printError(x);
+			return;
+		}
+		
+		printText("Данные, полученные из базы данных:");
+		try
+		{
 			String str = dbManager.tableToString("MainTable");
-			textArea.setText(textArea.getText() + str);
-	    }
-	    catch (Exception x)
-	    {
-	    	String error = x.getMessage() + "\n" + x.getStackTrace();
-	    	System.out.println(error);
-	    	textArea.setText(textArea.getText() + error);
-	    }
-	    finally
-	    {
-	    	dbManager.Stop();
-	    	xlsManager.Stop();
-	    }
+			printText(str);
+		}
+		catch (Exception x)
+		{
+			printText("Ошибка вывода таблицы из базы данных!");
+			printError(x);
+			return;
+		}
+		
+		dbManager.Stop();
+	    xlsManager.Stop();
 	    
-		System.out.println("Program stopped.");
+	    printText("Конец программы");
+	}
+	
+	/* Вывод текста */
+	public static void printText(String str)
+	{
+		if (USE_FORM_OUTPUT) form.printText(str);
+		if (USE_CONSOLE_OUTPUT) System.out.println(str);
+	}
+
+	/* Вывод ошибки */
+	public static void printError(Exception x)
+	{
+		printText(x.getMessage() + "\n\r" + x.getStackTrace());
 	}
 }
