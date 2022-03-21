@@ -12,4 +12,4 @@
 - [Apache POI](https://poi.apache.org/download.html)
 
 Excel документ и SQL база данных находятся в папке XlsParser.
-Для проверки запускать XlsParser1.jar в одной папке с excel документом.
+Для проверки запускать XlsParserExecute.jar в одной папке с excel документом.
