@@ -29,7 +29,7 @@ public class XLSManager
 	
 	/* Преобразовываем xls страницу в строку */
 	public String sheetToString(int id) throws Exception
-    {
+	{
 		String str = "";
 		
 		Sheet sheet = workbook.getSheetAt(id);
