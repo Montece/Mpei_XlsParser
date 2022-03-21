@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class DBElement
 {
-	//Список всех полей
+	//РЎРїРёСЃРѕРє РІСЃРµС… РїРѕР»РµР№
 	
     public int id;
     public String company;
@@ -25,13 +25,13 @@ public class DBElement
     private static final SimpleDateFormat XLS_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
     private static final SimpleDateFormat DB_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
     
-    /* Пустой конструктор */
+    /* РџСѓСЃС‚РѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ */
     public DBElement()
     {
     	
     }
     
-    /* Конструктор с параметрами для полей класса */
+    /* РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё РґР»СЏ РїРѕР»РµР№ РєР»Р°СЃСЃР° */
     public DBElement(int id_, String company_, int fact_qliq_data1_, int fact_qliq_data2_, int fact_qoil_data1_, int fact_qoil_data2_,
     		int forecast_qliq_data1_, int forecast_qliq_data2_, int forecast_qoil_data1_, int forecast_qoil_data2_, Date date_)
     {
@@ -71,7 +71,7 @@ public class DBElement
     	date = date_;
     }
     
-    /* Перегрузка метода toString для упрощения вывода объекта */
+    /* РџРµСЂРµРіСЂСѓР·РєР° РјРµС‚РѕРґР° toString РґР»СЏ СѓРїСЂРѕС‰РµРЅРёСЏ РІС‹РІРѕРґР° РѕР±СЉРµРєС‚Р° */
     @Override
     public String toString()
     {

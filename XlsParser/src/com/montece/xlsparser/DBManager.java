@@ -14,7 +14,7 @@ public class DBManager
     
     private Connection connection;
 
-    /* Конструктор для инициализации класса. Устанавливает соединение с БД и подключает драйвер */
+    /* РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РєР»Р°СЃСЃР°. РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃРѕРµРґРёРЅРµРЅРёРµ СЃ Р‘Р” Рё РїРѕРґРєР»СЋС‡Р°РµС‚ РґСЂР°Р№РІРµСЂ */
     public DBManager(String databasePath) throws Exception
     {
     	DATABASE_PATH = databasePath;
@@ -22,7 +22,7 @@ public class DBManager
     	this.connection = DriverManager.getConnection(CONNECTION_STRING + DATABASE_PATH);
     }
     
-    /* Добавляем новый элемент в таблицу */
+    /* Р”РѕР±Р°РІР»СЏРµРј РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚ РІ С‚Р°Р±Р»РёС†Сѓ */
     public void addElement(String tableName, DBElement element) throws Exception
     {
     	PreparedStatement statement;
@@ -45,7 +45,7 @@ public class DBManager
         statement.close();
     }
     
-    /* Преобразовываем таблицу в строку */
+    /* РџСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°РµРј С‚Р°Р±Р»РёС†Сѓ РІ СЃС‚СЂРѕРєСѓ */
 	public String tableToString(String tableName) throws Exception
     {
 		String str = "";
@@ -78,7 +78,7 @@ public class DBManager
 		return str;
     }
     
-	/* Создаем таблицу */
+	/* РЎРѕР·РґР°РµРј С‚Р°Р±Р»РёС†Сѓ */
     public void addTable(String tableName) throws Exception
     {
     	PreparedStatement statement = this.connection.prepareStatement(String.format("CREATE TABLE [%s] (" + 
@@ -99,7 +99,7 @@ public class DBManager
     	statement.close();
     }
     
-    /* Удаляем таблицу */
+    /* РЈРґР°Р»СЏРµРј С‚Р°Р±Р»РёС†Сѓ */
     public void deleteTable(String tableName) throws Exception
     {
     	PreparedStatement statement = this.connection.prepareStatement(String.format("DROP TABLE [%s]", tableName));
@@ -107,7 +107,7 @@ public class DBManager
     	statement.close();
     }
     
-    /* Завершаем работу с БД */
+    /* Р—Р°РІРµСЂС€Р°РµРј СЂР°Р±РѕС‚Сѓ СЃ Р‘Р” */
     public void Stop()
     {
     	try

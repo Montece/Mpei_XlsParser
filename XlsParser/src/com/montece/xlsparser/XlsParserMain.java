@@ -10,75 +10,75 @@ public class XlsParserMain
 	private static final boolean USE_CONSOLE_OUTPUT = false;
 	private static final boolean USE_FORM_OUTPUT = true;
 	
-	/* Точка вхождения программы */
+	/* РўРѕС‡РєР° РІС…РѕР¶РґРµРЅРёСЏ РїСЂРѕРіСЂР°РјРјС‹ */
 	public static void main(String[] args)
 	{
 		form = new MainForm("XlsParserMain - Window", 500, 750);
 		
-		printText("Запуск программы");
+		printText("Р—Р°РїСѓСЃРє РїСЂРѕРіСЂР°РјРјС‹");
 		
-	   	printText("Инициализация базы данных...");
+	   	printText("РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р±Р°Р·С‹ РґР°РЅРЅС‹С…...");
 	   	try
 	   	{
 	   		dbManager = new DBManager("Main.s3db"); //args[1]
 	    }
 	    catch (Exception x)
 	   	{
-	   		printText("Ошибка инициализации базы данных!");
+	   		printText("РћС€РёР±РєР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Р±Р°Р·С‹ РґР°РЅРЅС‹С…!");
 	   		printError(x);
 	   		return;
 	   	}
-	   	printText("Успешная инициализации базы данных!");
+	   	printText("РЈСЃРїРµС€РЅР°СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Р±Р°Р·С‹ РґР°РЅРЅС‹С…!");
 	    
-	    printText("Инициализация документа excel...");
+	    printText("РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РґРѕРєСѓРјРµРЅС‚Р° excel...");
 	    try
 	   	{
-	   		xlsManager = new XLSManager("Задание.xlsx"); //args[2]
+	   		xlsManager = new XLSManager("Р—Р°РґР°РЅРёРµ.xlsx"); //args[2]
 	   	}
 	   	catch (Exception x)
 	    {
-	    	printText("Ошибка инициализации документа excel!");
+	    	printText("РћС€РёР±РєР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РґРѕРєСѓРјРµРЅС‚Р° excel!");
 	   		printError(x);
 	   		return;
 	   	}
 		
-	    printText("Удаление уже существующей таблицы...");
+	    printText("РЈРґР°Р»РµРЅРёРµ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµР№ С‚Р°Р±Р»РёС†С‹...");
 		try
 		{
 			dbManager.deleteTable("MainTable");
 		}
 		catch (Exception x)
 		{
-			printText("Таблицы не существует! Создание новой...");
+			printText("РўР°Р±Р»РёС†С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚! РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕР№...");
 		}
 		
-		printText("Добавление новой таблицы...");
+		printText("Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕР№ С‚Р°Р±Р»РёС†С‹...");
 		try
 		{
 			dbManager.addTable("MainTable");
 		}
 		catch (Exception x)
 		{
-			printText("Ошибка добавления таблицы!");
+			printText("РћС€РёР±РєР° РґРѕР±Р°РІР»РµРЅРёСЏ С‚Р°Р±Р»РёС†С‹!");
 			printError(x);
 			return;
 		}
 		
 		List<DBElement> elements = null;
 		
-		printText("Парсинг excel документа...");
+		printText("РџР°СЂСЃРёРЅРі excel РґРѕРєСѓРјРµРЅС‚Р°...");
 		try
 		{
 			elements = xlsManager.createElementsArray(0);
 		}
 		catch (Exception x)
 		{
-			printText("Ошибка парсинга таблицы!");
+			printText("РћС€РёР±РєР° РїР°СЂСЃРёРЅРіР° С‚Р°Р±Р»РёС†С‹!");
 			printError(x);
 			return;
 		}
 		
-		printText("Добавление элементов в таблицу...");
+		printText("Р”РѕР±Р°РІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚РѕРІ РІ С‚Р°Р±Р»РёС†Сѓ...");
 		try
 		{
 			for	(DBElement element : elements)
@@ -88,12 +88,12 @@ public class XlsParserMain
 		}
 		catch (Exception x)
 		{
-			printText("Ошибка добавления элементов в таблицу!");
+			printText("РћС€РёР±РєР° РґРѕР±Р°РІР»РµРЅРёСЏ СЌР»РµРјРµРЅС‚РѕРІ РІ С‚Р°Р±Р»РёС†Сѓ!");
 			printError(x);
 			return;
 		}
 		
-		printText("Данные, полученные из базы данных:");
+		printText("Р”Р°РЅРЅС‹Рµ, РїРѕР»СѓС‡РµРЅРЅС‹Рµ РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹С…:");
 		try
 		{
 			String str = dbManager.tableToString("MainTable");
@@ -101,7 +101,7 @@ public class XlsParserMain
 		}
 		catch (Exception x)
 		{
-			printText("Ошибка вывода таблицы из базы данных!");
+			printText("РћС€РёР±РєР° РІС‹РІРѕРґР° С‚Р°Р±Р»РёС†С‹ РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹С…!");
 			printError(x);
 			return;
 		}
@@ -109,17 +109,17 @@ public class XlsParserMain
 		dbManager.Stop();
 	    xlsManager.Stop();
 	    
-	    printText("Конец программы");
+	    printText("РљРѕРЅРµС† РїСЂРѕРіСЂР°РјРјС‹");
 	}
 	
-	/* Вывод текста */
+	/* Р’С‹РІРѕРґ С‚РµРєСЃС‚Р° */
 	public static void printText(String str)
 	{
 		if (USE_FORM_OUTPUT) form.printText(str);
 		if (USE_CONSOLE_OUTPUT) System.out.println(str);
 	}
 
-	/* Вывод ошибки */
+	/* Р’С‹РІРѕРґ РѕС€РёР±РєРё */
 	public static void printError(Exception x)
 	{
 		printText(x.getMessage() + "\n\r" + x.getStackTrace());

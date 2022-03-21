@@ -11,15 +11,15 @@ public class MainForm
 	private static JFrame form;
 	private static JTextArea text;
 	
-	/* Конструктор формы с ее заголовком и размерами */
+	/* РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РѕСЂРјС‹ СЃ РµРµ Р·Р°РіРѕР»РѕРІРєРѕРј Рё СЂР°Р·РјРµСЂР°РјРё */
 	public MainForm(String title, int width, int height)
 	{
-		//Отрисовка окна посередине экрана с информацией из базы данных, которая туда поступила из файла excel
+		//РћС‚СЂРёСЃРѕРІРєР° РѕРєРЅР° РїРѕСЃРµСЂРµРґРёРЅРµ СЌРєСЂР°РЅР° СЃ РёРЅС„РѕСЂРјР°С†РёРµР№ РёР· Р±Р°Р·С‹ РґР°РЅРЅС‹С…, РєРѕС‚РѕСЂР°СЏ С‚СѓРґР° РїРѕСЃС‚СѓРїРёР»Р° РёР· С„Р°Р№Р»Р° excel
 		form = new JFrame(title);
 		form.setSize(width, height);
 		form.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//Посередине экрана
+		//РџРѕСЃРµСЂРµРґРёРЅРµ СЌРєСЂР°РЅР°
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		form.setLocation(dim.width / 2 - form.getSize().width / 2, dim.height / 2 - form.getSize().height / 2);
 		
@@ -30,7 +30,7 @@ public class MainForm
 		form.setVisible(true);
 	}
 	
-	/* Вывод текста в форму */
+	/* Р’С‹РІРѕРґ С‚РµРєСЃС‚Р° РІ С„РѕСЂРјСѓ */
 	public void printText(String str)
 	{
 		text.setText(text.getText() + "\n\r" + str);

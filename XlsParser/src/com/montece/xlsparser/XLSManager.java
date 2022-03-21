@@ -19,7 +19,7 @@ public class XLSManager
 	private FileInputStream stream;
 	private Workbook workbook;
 	
-	/* Конструктор для инициализации класса. Начинает сразу читать файл */
+	/* РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РєР»Р°СЃСЃР°. РќР°С‡РёРЅР°РµС‚ СЃСЂР°Р·Сѓ С‡РёС‚Р°С‚СЊ С„Р°Р№Р» */
 	public XLSManager(String filePath) throws Exception
 	{
 		FILE_PATH = new File(filePath);
@@ -27,7 +27,7 @@ public class XLSManager
 		workbook = new XSSFWorkbook(stream);
 	}
 	
-	/* Преобразовываем xls страницу в строку */
+	/* РџСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°РµРј xls СЃС‚СЂР°РЅРёС†Сѓ РІ СЃС‚СЂРѕРєСѓ */
 	public String sheetToString(int id) throws Exception
     {
 		String str = "";
@@ -48,7 +48,7 @@ public class XLSManager
 						str += cell.getNumericCellValue() + "\t";
 						break;
 					case BLANK:
-						str += "<пусто>\t";						
+						str += "<РїСѓСЃС‚Рѕ>\t";						
 						break;
 					default:
 						break;
@@ -61,7 +61,7 @@ public class XLSManager
 		return str;
     }
 
-	/* Создание массива элементов из файла excel */
+	/* РЎРѕР·РґР°РЅРёРµ РјР°СЃСЃРёРІР° СЌР»РµРјРµРЅС‚РѕРІ РёР· С„Р°Р№Р»Р° excel */
 	public List<DBElement> createElementsArray(int id) throws ParseException
 	{
 		List<DBElement> elements = new ArrayList<DBElement>();
@@ -124,7 +124,7 @@ public class XLSManager
 		return elements;
 	}
 
-	/* Закрытие файла */
+	/* Р—Р°РєСЂС‹С‚РёРµ С„Р°Р№Р»Р° */
 	public void Stop()
 	{
 		try
